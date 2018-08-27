@@ -26,28 +26,28 @@ include('../check.php');
 
     <div class="col s4 offset-s4 ">
 
-        <form class="row grey darken-4 white-text z-depth-5" action="guardando_incidente.php" method="post" enctype="multipart/form-data" >
+        <form class="row grey darken-4 white-text z-depth-5" action="guardando_usuario.php" method="post" enctype="multipart/form-data" >
           <?php
             echo "<div class='row'><a class='dropdown-button left white-text col s2' href='../login.php' ><i class='material-icons'>arrow_back</i> Regresar</a></div>";
             echo "<br><div class='row '>Bienvenido $user_check</div>";
             echo" <div class='input-field col s12 m12'>
-                    <input type='text' name='nombre' id='habitacion' class='validate' required>
-                    <label for='habitacion'>Nombre de usuario</label>
+                    <input type='text' name='nombre' id='nombre' class='validate' required>
+                    <label for='nombre'>Nombre de usuario</label>
                   </div>";
                   
           ?>
           <div class="col s12 m12">
             <div class="input-field white-text">
-              <select name="objeto" required>
-                <option value= '0' > Estandar </option >
-                <option value= '1' > Administrador </option>
+              <select name="tipo" required>
+                <option value= '1' > Estandar </option >
+                <option value= '0' > Administrador </option>
               </select>
             <label>Permiso:</label>
             </div>
 
           </div>
           <div class="input-field col s12">
-            <input id="password" type="password" class="validate" name="contrasena_l" required>
+            <input id="password" type="password" class="validate" name="pass" required>
             <label for="password">Password</label>
           </div>
 
