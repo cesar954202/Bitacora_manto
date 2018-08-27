@@ -37,9 +37,9 @@ include('check.php');
             <li>
               <div class='collapsible-header teal lighten-2 white-text'>ADMINISTRAR USUARIOS</div>
               <div class='collapsible-body'><span>
-                <div class='row'><a class='waves-effect btn col s12  teal darken-1'>Crear</a></div>
-                <div class='row'><a class='waves-effect btn col s12  teal darken-1'>Borrar</a></div>
-                <div class='row'><a class='waves-effect btn col s12  teal darken-1'>Editar</a></div>
+                <div class='row'><a class='waves-effect btn col s12 teal darken-1'>Crear</a></div>
+                <div class='row'><a class='waves-effect btn col s12 teal darken-1'>Borrar</a></div>
+                <div class='row'><a class='waves-effect btn col s12 teal darken-1'>Editar</a></div>
               </span></div>
             </li>
           </ul>

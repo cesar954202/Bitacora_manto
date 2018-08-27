@@ -63,16 +63,16 @@
 
     <!--contenedor Principal-->
 
-  <div class="row">
+  <div class="row center">
 
-
+    <div class="col s12 m4"></div>
   <!--contenedor de login-->
-    <div class="col s4 offset-s4 ">
-
+    <div class="col s12 m4">
+      <div = class="row">
 
         <form class="row grey darken-4 white-text z-depth-5" action="" method="post" enctype="multipart/form-data" >
-        <center><h4 class="center" >Bienvenido</h4></center>
-        <center><h6 class="center" >Sistema para control de mantenimeinto a chapas y cajas de seguridad</h6><br></center>
+        <div class="row"><center><h4 class="center col s12" >Bienvenido</h4></center></div>
+        <div class="row"><center><h6 class="center col s12" >Sistema para control de mantenimeinto a chapas y cajas de seguridad</h6><br></center></div>
 
 
         <div class="row center"><img src="img/logo1.png"></div>
@@ -95,7 +95,7 @@
         <button class="btn block amber round-xxlarge hover-orange row col s4 offset-s4" type="submit" name="Submit">Ingresar</button>
 
         </form>
-
+      </div>
     </div>
   <!--fin contenedor de login-->
   </div>
