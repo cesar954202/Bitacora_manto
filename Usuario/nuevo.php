@@ -13,7 +13,7 @@ include('../check.php');
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <html>
-<title>Login</title>
+<title>Nuevo usuario</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <body class="blue-grey">
 
@@ -31,35 +31,24 @@ include('../check.php');
             echo "<div class='row'><a class='dropdown-button left white-text col s2' href='../login.php' ><i class='material-icons'>arrow_back</i> Regresar</a></div>";
             echo "<br><div class='row '>Bienvenido $user_check</div>";
             echo" <div class='input-field col s12 m12'>
-                    <input type='text' name='numeroHab' id='habitacion' class='validate' onkeypress='return valida(event)' required>
-                    <label for='habitacion'># Habitación</label>
+                    <input type='text' name='nombre' id='habitacion' class='validate' required>
+                    <label for='habitacion'>Nombre de usuario</label>
                   </div>";
                   
-
-            echo "<div class='input-field col s12 m12 white-text'>
-              <select multiple name='servicio[]' required>";
-                       echo "<option value= 'Cambio de baterias' > Cambio de baterias </option>";
-                       echo "<option value= 'Apertura' >Apertura</option>";
-                       echo "<option value= 'Reprogramacion' > Reprogramacion </option>";
-                       echo "<option value= 'Problema mecanico' > Problema mecanico </option>";
-                       echo "<option value= 'Marca seguro interno' > Marca seguro interno </option>";
-              echo"</select>
-              <label>Servicio</label>
-            </div>";
           ?>
           <div class="col s12 m12">
             <div class="input-field white-text">
               <select name="objeto" required>
-                <option value= 'chapa' > Chapa </option >
-                <option value= 'caja' > Caja </option>
+                <option value= '0' > Estandar </option >
+                <option value= '1' > Administrador </option>
               </select>
-            <label>Servicio a</label>
+            <label>Permiso:</label>
             </div>
 
           </div>
-          <div class="input-field col s12 m12">
-            <textarea name="comentario" id="comentario" class="materialize-textarea" required></textarea>
-            <label for="comentario">Comentario</label>
+          <div class="input-field col s12">
+            <input id="password" type="password" class="validate" name="contrasena_l" required>
+            <label for="password">Password</label>
           </div>
 
         <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Guardar</button>
@@ -75,20 +64,6 @@ include('../check.php');
         $(document).ready(function() {
         $('select').material_select();
       });
-
-        function valida(e){
-          tecla = (document.all) ? e.keyCode : e.which;
-
-          //Tecla de retroceso para borrar, siempre la permite
-          if (tecla==8){
-              return true;
-          }
-              
-          // Patron de entrada, en este caso solo acepta numeros
-          patron =/[0-9]/;
-          tecla_final = String.fromCharCode(tecla);
-          return patron.test(tecla_final);
-      }
       </script>
 
 </body>
