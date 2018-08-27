@@ -50,7 +50,7 @@ include('check.php');
 
       }
       echo"<div class = 'row'><a href='incidente/index.php' class='waves-effect btn col s4 offset-s4'>Nuevo incidencia</a></div>";
-      echo"<div class = 'row'><a class='waves-effect btn col s4 offset-s4'>Estadisticas</a></div>";
+      echo"<div class = 'row'><a href='Estadisticas/index.php' class='waves-effect btn col s4 offset-s4'>Estadisticas</a></div>";
       echo"<div class = 'row'><a class='waves-effect btn col s4 offset-s4'>Alertas</a></div>";
 
       echo"<br><div class = 'row '><a href='logout.php' class='waves-effect blue-grey btn '>Cerrar sesión</a></div>";
