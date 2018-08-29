@@ -12,7 +12,7 @@
             {
               while ($rowV = $resultV->fetch_object())
               {
-                $id_user= $rowV->id;
+                $id_user= $rowV->id_usuario;
               }
              }
           }
