@@ -56,11 +56,12 @@ include('../check.php');
             </div>
           </div>
 
-          <div class='col s1'>
+          <div class='col s2'>
             <div class='input-field white-text'>
-              <select name='objeto' required>
-                <option value= 'chapa' > Chapa </option >
-                <option value= 'caja' > Caja </option>
+              <select name='objeto[]' multiple required>
+                <option value= ' ' selected>Cualquiera</option>
+                <option value= 'chapa' >Chapa</option >
+                <option value= 'caja' >Caja</option>
               </select>
               <label>Servicio a</label>
             </div>
@@ -73,9 +74,9 @@ include('../check.php');
             </div>
           </div>";
 /////////impresion de usuarios en opciones
-        echo "<div class='input-field col s3 white-text'>
+        echo "<div class='input-field col s2 white-text'>
               <select name='usuario[]' multiple>
-              <option value='-1' selected>Cualquiera</option>
+                <option value= ' ' selected>Cualquiera</option>
               ";
 
               $sqlquery = "SELECT * FROM usuarios";
@@ -85,7 +86,7 @@ include('../check.php');
                 {
                   while ($row = $result->fetch_object())
                   {
-                   echo "<option value= '$row->id' > $row->nombre</option>";
+                   echo "<option value= '$row->id_usuario' > $row->nombre</option>";
                   }
                 }
               }
@@ -139,10 +140,10 @@ include('../check.php');
         $anterior = 0;
 
         $sqlquery = "SELECT * FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario";
-        $sqlTEST = "SELECT * FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario";
         
       
-
+/////integraciones de la consulta
+          ////Servicio
       if($servicio[0] != ' ')
       {
         $anterior = 1;
@@ -160,11 +161,10 @@ include('../check.php');
 
         $sqlquery = $sqlquery . ' )';
       }
+        ////Habitacion
 
-
-      if($habitacion > 0 )
+      if(!empty($habitacion) )
       {
-        $anterior = 1;
         if($anterior == 1)
         {
           $sqlquery = $sqlquery .' AND ';
@@ -173,13 +173,93 @@ include('../check.php');
         {
           $sqlquery = $sqlquery .' WHERE ';
         }
-        $sqlquery = $sqlquery ." ( habitacion = '" . $habitacion . "' ) ";
+        $anterior = 1;
+        $sqlquery = $sqlquery ." ( habitacion LIKE '" . $habitacion . "' ) ";
       }
 
-      echo $sqlquery;
+      ///Objeto
+
+      if($objeto[0] != ' ')
+      {
+        if($anterior == 1)
+        {
+          $sqlquery = $sqlquery .' AND ';
+        }
+        else
+        {
+          $sqlquery = $sqlquery .' WHERE ';
+        }
+        $anterior = 1;
+
+        $sqlquery = $sqlquery . ' ( ';
+
+        for ($i=0;$i<count($objeto);$i++)
+        {
+          $sqlquery = $sqlquery ." objeto = '" .$objeto[$i] ."' ";
+
+          if($i != (count($objeto)-1))
+          {
+            $sqlquery = $sqlquery .' OR ';
+          }
+        }
+
+        $sqlquery = $sqlquery . ' )';
+      }
+
+      ///////Comentario
+      
+      if(!empty($comentario))
+      {
+        if($anterior == 1)
+        {
+          $sqlquery = $sqlquery .' AND ';
+        }
+        else
+        {
+          $sqlquery = $sqlquery .' WHERE ';
+        }
+        $anterior = 1;
+        $sqlquery = $sqlquery ." ( comentario LIKE '" . $comentario . "' ) ";
+      }
+
+      ///Usuario
+
+      if($usuario[0] != ' ')
+      {
+        if($anterior == 1)
+        {
+          $sqlquery = $sqlquery .' AND ';
+        }
+        else
+        {
+          $sqlquery = $sqlquery .' WHERE ';
+        }
+        $anterior = 1;
+
+        $sqlquery = $sqlquery . ' ( ';
+
+        for ($i=0;$i<count($usuario);$i++)
+        {
+          $sqlquery = $sqlquery ." usuarios.id_usuario = " . $usuario[$i] ." ";
+
+          if($i != (count($usuario)-1))
+          {
+            $sqlquery = $sqlquery .' OR ';
+          }
+        }
+
+        $sqlquery = $sqlquery . ' )';
+      }
+
+      //
+//////////////////////////Termina construccion de la consulta
+      echo $sqlquery . "<br>";
 
 
-        echo "<div class='row'><a href='index.php' class='waves-effect btn col s4 offset-s4 teal darken-1 '>Buscar de nuevo</a></div>";
+        echo "<div class='row'>
+                <a class='waves-effect btn col s2 offset-s3 teal darken-1' onclick='history.back()'>Editar</a>
+                <a href='index.php' class='waves-effect btn col s2 offset-s2 teal darken-1 '>Nueva Busqueda</a>
+              </div>";
 
         echo "<table class='bordered grey darken-2'>
                 <thead class='teal darken-4'>
@@ -200,6 +280,7 @@ include('../check.php');
         {
           if ($result->num_rows > 0)
           {
+            echo "Cantidad de resultados: " . $result->num_rows . "<br>";
             while ($row = $result->fetch_object())
             {
              echo "<tr>
@@ -213,6 +294,10 @@ include('../check.php');
                   </tr>
              ";
             }
+          }
+          else 
+          {
+            echo "Sin resultados";
           }
         }
 
