@@ -118,6 +118,13 @@ include('../check.php');
         ";
 
       }
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////Realizando Busquedas
       else
       {
 
@@ -139,7 +146,9 @@ include('../check.php');
 
         $anterior = 0;
 
-        $sqlquery = "SELECT * FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario";
+        $sql1Parte = "SELECT id_incidente,habitacion,objeto,servicio,comentario,date_1,nombre FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario";
+
+        $sqlquery = "";
         
       
 /////integraciones de la consulta
@@ -251,8 +260,27 @@ include('../check.php');
         $sqlquery = $sqlquery . ' )';
       }
 
-      //
+      // Fechas
+      if($anterior == 1)
+      {
+        $sqlquery = $sqlquery .' AND ';
+      }
+      else
+      {
+        $sqlquery = $sqlquery .' WHERE ';
+      }
+
+      $ffinalMasUno = strtotime ( '+1 day' , strtotime ( $ffinal ) ) ;
+      $ffinalMasUno = date ( 'Y-m-j' , $ffinalMasUno );
+
+      $sqlquery = $sqlquery . "( date_1 BETWEEN '" . $finicio . "' AND '" . $ffinalMasUno . "' )";
+
+
 //////////////////////////Termina construccion de la consulta
+
+      //Se construye la consulta 
+      $sql2Parte = $sqlquery;
+      $sqlquery = $sql1Parte . $sqlquery;
       echo $sqlquery . "<br>";
 
 
@@ -264,6 +292,7 @@ include('../check.php');
         echo "<table class='bordered grey darken-2'>
                 <thead class='teal darken-4'>
                   <tr>
+                      <th></th>
                       <th>id</th>
                       <th># habitacion</th>
                       <th>Objeto</th>
@@ -280,16 +309,27 @@ include('../check.php');
         {
           if ($result->num_rows > 0)
           {
-            echo "Cantidad de resultados: " . $result->num_rows . "<br>";
+            $sqlqueryEnvio = $sql2Parte;
+            echo 'Cantidad de resultados: ' . $result->num_rows . '<br>
+                <form action="graficas/index.php" method="post">
+                  <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
+
+                  <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar</button>
+                </form>
+
+            ';
+            $cuenta = 0;
             while ($row = $result->fetch_object())
             {
+              $cuenta = $cuenta+1;
              echo "<tr>
-                      <td>$row->id_incidente</td>
+                      <td>$cuenta</td>
+                      <td>C$row->id_incidente</td>
                       <td>$row->habitacion</td>
                       <td>$row->objeto</td>
                       <td>$row->servicio</td>
                       <td>$row->comentario</td>
-                      <td>$row->date</td>
+                      <td>$row->date_1</td>
                       <td>$row->nombre</td>
                   </tr>
              ";
