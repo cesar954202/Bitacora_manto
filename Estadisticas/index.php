@@ -320,8 +320,11 @@ include('../check.php');
 
                       <h5 class='header'> Graficar por: </h5>
                       <div class='row white-text blue-grey'>";
-
-                        echo "<div class='btn-large row col s4 offset-s4 modal-trigger teal darken-1' href = 'Graficas/index.php?consulta=". $sqlqueryEnvio ."&ordenar=habitacion'> Graficar habitacion test</div>";
+                        echo '<form action="Graficas/index.php" method="post">
+                                <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
+                                <input type="hidden" value="habitacion" name="ordenar">
+                                <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por usuario</button>
+                              </form>';
 
                         echo '<form action="Graficas/index.php" method="post">
                                 <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">

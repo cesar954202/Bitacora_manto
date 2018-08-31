@@ -28,7 +28,7 @@ include('../../check.php');
       echo"<a href='../logout.php' class='waves-effect blue-grey btn col s2 offset-s7'>Cerrar sesión</a></div>";
       echo "<br><div class='row '>Bienvenido $user_check <br> Busquedas de resultados</div>";
 
-      if(!$GET)
+      if(!$_POST)
       {
         header('Location: ../index.php');
       }
@@ -37,8 +37,8 @@ include('../../check.php');
       {
 
 
-        $sql = $_GET['consulta'];
-        $Horziontal = $_GET['ordenar'];
+        $sql = $_POST['consulta'];
+        $Horziontal = $_POST['ordenar'];
 
         //$sql = addslashes($sql);
         //
