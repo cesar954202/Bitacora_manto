@@ -320,7 +320,7 @@ include('../check.php');
 
                       <h5 class='header'> Graficar por: </h5>
                       <div class='row white-text blue-grey'>";
-                        echo '<form action="Graficas/index.php" method="post">
+                        echo '<form action="Graficas/index.php" target="_blank" method="post">
                                 <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
                                 <input type="hidden" value="habitacion" name="ordenar">
                                 <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por usuario</button>
@@ -341,88 +341,6 @@ include('../check.php');
                     echo "</div>";
                 echo"</div> ";
               echo"</div>";
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////Grafica por Habitacion
-              echo"<div class='modal blue-grey' id='modalgraficaHabitacion'>
-                  <div class='modal-content'>
-
-                      <h5 class='header'>Habitacion</h5>
-                      <div class='row white-text blue-grey'>";
-
-                      $sql = $sqlqueryEnvio;
-                      $Horziontal = "Habitacion";
-          ///////////////////////PHP Para la grafica
-                      $sqlSobreResult = "SELECT distinct $Horziontal as horizontal FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario  ". $sql ." ";
-
-                      $datos[0] = array('Cantidad',$Horziontal);
-
-                      //echo "<br> Segunda consulta: " . $sqlSobreResult;
-                      if ($resultGrafica = $mysqli->query($sqlSobreResult))
-                      {
-                        if ($resultGrafica->num_rows > 0)
-                        {
-                          $i = 1;
-                          while ($row = $resultGrafica->fetch_object())
-                          {
-                            //echo $Horziontal . ": " . $row->horizontal;
-                            $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario ". $sql ." AND $Horziontal = '$row->horizontal'";
-                            if ($resultCantidad = $mysqli->query($sqlSobreResultCantidad))
-                            {
-                              if ($resultCantidad->num_rows > 0)
-                              {
-                                while ($rowCantidad = $resultCantidad->fetch_object())
-                                {
-                                  //echo " Cantidad: " . $rowCantidad->numero . "<br>";
-                                  $datos[$i] = array( $row->horizontal , (int)$rowCantidad->numero ); 
-                                  $i = $i +1;
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-          /////////////Script Grafica
-                      echo "
-                      <script>
-                      google.charts.load('current', {'packages':['bar']});
-                      google.charts.setOnLoadCallback(drawStuff);
-
-                      var cargaDatos = "; echo json_encode($datos); echo";
-
-                      function drawStuff() {
-
-                        var data = new google.visualization.arrayToDataTable(cargaDatos);
-
-                        var options = {
-                          title: 'Chess opening moves',
-                          width: 750,
-                          height: 480,
-                          legend: { position: 'none' },
-                          chart: { title: 'Chess opening moves',
-                                   subtitle: 'popularity by percentage' },
-                          bars: 'horizontal', // Required for Material Bar Charts.
-                          axes: {
-                            x: {
-                              0: { side: 'top', label: 'Percentage'} // Top x-axis.
-                            }
-                          },
-                          bar: { groupWidth: '90%' }
-                        };
-
-                        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-                        chart.draw(data, options);
-                      };
-                      </script>
-                      <div class='row'><div id='top_x_div' style='width: 750px; height: 480px;'></div></div>
-
-                      ";
-
-
-                    echo "</div>";
-                echo"</div> ";
-              echo"</div>";
-    //////////////Fin grafica habitacion
-/////////////////////////////////////////////////////////////////Fin Modales Graficas
 
 
             echo '<br>Cantidad de resultados: ' . $result->num_rows . '<br>';
