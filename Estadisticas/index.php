@@ -326,13 +326,13 @@ include('../check.php');
                                 <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por usuario</button>
                               </form>';
 
-                        echo '<form action="Graficas/index.php" method="post">
+                        echo '<form action="Graficas/index.php" target="_blank" method="post">
                                 <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
                                 <input type="hidden" value="nombre" name="ordenar">
                                 <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por usuario</button>
                               </form>';
 
-                        echo '<form action="Graficas/index.php" method="post">
+                        echo '<form action="Graficas/index.php" target="_blank" method="post">
                                 <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
                                 <input type="hidden" value="servicio" name="ordenar">
                                 <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por servicio</button>
