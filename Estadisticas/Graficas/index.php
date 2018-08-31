@@ -28,7 +28,7 @@ include('../../check.php');
       echo"<a href='../logout.php' class='waves-effect blue-grey btn col s2 offset-s7'>Cerrar sesión</a></div>";
       echo "<br><div class='row '>Bienvenido $user_check <br> Busquedas de resultados</div>";
 
-      if(!$_POST)
+      if(!$GET)
       {
         header('Location: ../index.php');
       }
@@ -37,19 +37,20 @@ include('../../check.php');
       {
 
 
-        $sql = $_POST['consulta'];
+        $sql = $_GET['consulta'];
+        $Horziontal = $_GET['ordenar'];
 
         //$sql = addslashes($sql);
         //
         //SELECT distinct title from solvetic.solvetic_mysql;
-        echo $sql;
-        $Horziontal = "habitacion";
+        //echo $sql;
+        //$Horziontal = "nombre";
 
         $sqlSobreResult = "SELECT distinct $Horziontal as horizontal FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario  ". $sql ." ";
 
-        $datos[0] = array('Cantidad','Habitacion');
+        $datos[0] = array('Cantidad','$Horziontal');
 
-        echo "<br> Segunda consulta: " . $sqlSobreResult;
+        //echo "<br> Segunda consulta: " . $sqlSobreResult;
         if ($result = $mysqli->query($sqlSobreResult))
         {
           if ($result->num_rows > 0)
@@ -57,7 +58,7 @@ include('../../check.php');
             $i = 1;
             while ($row = $result->fetch_object())
             {
-              echo $Horziontal . ": " . $row->horizontal;
+              //echo $Horziontal . ": " . $row->horizontal;
               $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario ". $sql ." AND $Horziontal = '$row->horizontal'";
               if ($resultCantidad = $mysqli->query($sqlSobreResultCantidad))
               {
@@ -65,8 +66,8 @@ include('../../check.php');
                 {
                   while ($rowCantidad = $resultCantidad->fetch_object())
                   {
-                    echo " Cantidad: " . $rowCantidad->numero . "<br>";
-                    $datos[$i] = array( $row->horizontal , $rowCantidad->numero ); 
+                    //echo " Cantidad: " . $rowCantidad->numero . "<br>";
+                    $datos[$i] = array( $row->horizontal , (int)$rowCantidad->numero ); 
                     $i = $i +1;
                   }
                 }
@@ -101,14 +102,14 @@ include('../../check.php');
                     bar: { groupWidth: "30%" }
                   };
 
-                  var chart = new google.charts.Bar(document.getElementById('top_x_div col s12'));
+                  var chart = new google.charts.Bar(document.getElementById('top_x_div'));
                   // Convert the Classic options to Material options.
                   chart.draw(data, google.charts.Bar.convertOptions(options));
                 };
               </script>
+              <div class="row"><div id="top_x_div" style="width: 100%; height: 400px;"></div></div>
 
         <?php
-        echo '<div class="col s12 "><div id="top_x_div col s12" style="width: 600px; height: 600px;"></div></div>';
 
       }
 
