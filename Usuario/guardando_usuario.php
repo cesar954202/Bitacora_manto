@@ -1,7 +1,7 @@
 <?php
 include('../check.php');
 
-$nombre = $_POST['nombre'];
+$nombre = strtoupper($_POST['nombre']);
 $pass = $_POST['pass'];
 $tipo = $_POST['tipo'];
 

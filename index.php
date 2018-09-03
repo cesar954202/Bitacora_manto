@@ -5,7 +5,7 @@
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // Usamos el nombre de usuario enviado de nuestro formulario
 
-      $myusername = mysqli_real_escape_string($mysqli,$_POST['usuario_l']); // Nombre del usuario
+      $myusername = mysqli_real_escape_string($mysqli,strtoupper($_POST['usuario_l'])); // Nombre del usuario
       $mypassword = mysqli_real_escape_string($mysqli,$_POST['contrasena_l']); // Pdw del usuario 
 
 

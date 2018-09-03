@@ -35,18 +35,43 @@ include('../../check.php');
 
       else
       {
+        if(isset($_POST['finicio']))
+        {
+          $finicio = $_POST['finicio'];
+          $ffinal = $_POST['ffinal'];
 
 
-        $sql = $_POST['consulta'];
-        $Horziontal = $_POST['ordenar'];
+        }
+        else
+        {
+          $date1 = new DateTime("now");
+          $today = $date1->format('Y-m-d');
+          $finicio = $today;
+          $ffinal = $today;
+        }
 
-        //$sql = addslashes($sql);
-        //
-        //SELECT distinct title from solvetic.solvetic_mysql;
-        //echo $sql;
-        //$Horziontal = "nombre";
+       echo "
+        <div class='row'>
+         <form method = 'post'>
+            <div class='row'>
+            <div class='col s3 offset-s3'>
+              <div class='col s12 m12'>
+                <input type='date' name='finicio' id='finicio' value='$finicio' required>
+                <label for='finicio'>Fecha incial</label>
+              </div>
+            </div>
+            <div class='col s3'>
+              <div class='col s12 m12'>
+                <input type='date' name='ffinal' id='ffinal' value='$ffinal' required>
+                <label for='ffinal'>Fecha final</label>
+              </div>
+            </div>            <button class='waves-effect  btn  row col s4 offset-s4' type='submit' name='Submit'>Buscar</button>
+         </form>
+        </div>
 
-        $sqlSobreResult = "SELECT distinct $Horziontal as horizontal FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario  ". $sql ." ";
+        ";
+
+        $sqlSobreResult = "SELECT distinct habitacion as hab, (SELECT COUNT(*) FROM incidentes WHERE habitacion = hab) as numero FROM incidentes WHERE date_1 BETWEEN '$finicio' AND '$ffinal' ORDER BY numero DESC LIMIT 10";
 
         $datos[0] = array('Cantidad','Servicios');
 
@@ -58,25 +83,18 @@ include('../../check.php');
             $i = 1;
             while ($row = $result->fetch_object())
             {
-              //echo $Horziontal . ": " . $row->horizontal;
-              $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario ". $sql ." AND $Horziontal = '$row->horizontal'";
-              if ($resultCantidad = $mysqli->query($sqlSobreResultCantidad))
-              {
-                if ($resultCantidad->num_rows > 0)
-                {
-                  while ($rowCantidad = $resultCantidad->fetch_object())
-                  {
+              //echo $Horizontal . ": " . $row->horizontal;
                     //echo " Cantidad: " . $rowCantidad->numero . "<br>";
-                    $datos[$i] = array( $row->horizontal , (int)$rowCantidad->numero ); 
+                    $datos[$i] = array( $row->hab , (int)$row->numero ); 
                     $i = $i +1;
-                  }
-                }
-              }
+
             }
           }
         }
+        echo "<div class='row'>";
 
         ?>
+
 
               <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
               <script type="text/javascript">
@@ -93,11 +111,11 @@ include('../../check.php');
                     height: 400,
                     legend: { position: 'none' },
                     chart: {
-                      title: 'Grafica opcional',
+                      title: 'Grafica 10 mas frecuentes ',
                       subtitle: 'Sistema de control a mantenimeinto chapas y cajas de seguridad' },
                     axes: {
                       x: {
-                        0: { side: 'top', label: <?php echo "'". $Horziontal ."'"?>} // Top x-axis.
+                        0: { side: 'top', label: <?php echo "'habitacion'"?>} // Top x-axis.
                       }
                     },
                     bar: { groupWidth: "30%" }
@@ -109,8 +127,10 @@ include('../../check.php');
                 };
               </script>
               <div class="container"><div class="row"><div id="top_x_div" style="width: 750px; height: 500px;"></div></div></div>
+            </div>
 
         <?php
+
 
       }
 

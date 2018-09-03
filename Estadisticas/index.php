@@ -29,7 +29,32 @@ include('../check.php');
     $today = $date1->format('Y-m-d');
       echo "<br><div class='row'><a class='dropdown-button left white-text col s2' href='../login.php' ><i class='material-icons'>arrow_back</i> Regresar</a>";
       echo"<a href='../logout.php' class='waves-effect blue-grey btn col s2 offset-s7'>Cerrar sesión</a></div>";
-      echo "<br><div class='row '>Bienvenido $user_check <br> Busquedas de resultados</div>";
+      echo "  <div class='row'><a href='#graficos' class='waves-effect modal-trigger blue-grey btn-small col s3 offset-s1 white-text'>Graficas de resultados</a></div>
+              <br><div class='row '>Bienvenido $user_check 
+              <br> Busquedas de resultados</div>";
+
+    echo"<div class='modal blue-grey' id='graficos'>
+          <div class='modal-content'>
+              <h5 class='header'> Graficas </h5>
+              <div class='row white-text blue-grey'>";
+                echo '<form action="Graficas/resultadoPisos.php" target="_blank" method="post">
+                        <input type="hidden" value="pisos" name="ordenar">
+                        <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por pisos</button>
+                      </form>';
+                echo '<form action="Graficas/resultadoUsuario.php" target="_blank" method="post">
+                        <input type="hidden" value="Nada" name="consulta">
+                        <input type="hidden" value="habitacion" name="ordenar">
+                        <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por operador</button>
+                      </form>';
+                echo '<form action="Graficas/resultadoTop.php" target="_blank" method="post">
+                        <input type="hidden" value="Nada" name="consulta">
+                        <input type="hidden" value="habitacion" name="ordenar">
+                        <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar mas frecuentes</button>
+                      </form>';
+
+            echo "</div>";
+        echo"</div> ";
+      echo"</div>";
 
       if(!$_POST)
       {
@@ -313,7 +338,7 @@ include('../check.php');
           {
             $sqlqueryEnvio = $sql2Parte;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Modal Opciones de Grafica
-            echo "<div class='btn-large col s10 modal-trigger teal darken-1' href = '#modalgrafica'> Graficar</div>";
+            echo "<div class='btn-large col s10 modal-trigger teal darken-1' href = '#modalgrafica'> Graficar Resultado</div>";
 
             echo"<div class='modal blue-grey' id='modalgrafica'>
                   <div class='modal-content'>
@@ -323,16 +348,16 @@ include('../check.php');
                         echo '<form action="Graficas/index.php" target="_blank" method="post">
                                 <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
                                 <input type="hidden" value="habitacion" name="ordenar">
-                                <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por usuario</button>
+                                <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por habitacion</button>
                               </form>';
 
-                        echo '<form action="Graficas/index.php" method="post">
+                        echo '<form action="Graficas/index.php" target="_blank" method="post">
                                 <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
                                 <input type="hidden" value="nombre" name="ordenar">
                                 <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por usuario</button>
                               </form>';
 
-                        echo '<form action="Graficas/index.php" method="post">
+                        echo '<form action="Graficas/index.php" target="_blank" method="post">
                                 <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
                                 <input type="hidden" value="servicio" name="ordenar">
                                 <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por servicio</button>
