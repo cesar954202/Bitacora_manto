@@ -16,127 +16,108 @@ include('../../check.php');
 <title>Grafica</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <body class="blue-grey">
-
-    <!--contenedor Principal-->
+  <!--contenedor Principal-->
   <br>
   <div class="container center grey darken-4 white-text">
 
     <?php
     $date1 = new DateTime("now");
     $today = $date1->format('Y-m-d');
-      echo "<br><div class='row'><a class='dropdown-button left white-text col s2' href='../index.php' ><i class='material-icons'>arrow_back</i> Regresar</a>";
-      echo"<a href='../logout.php' class='waves-effect blue-grey btn col s2 offset-s7'>Cerrar sesión</a></div>";
-      echo "<br><div class='row '>Bienvenido $user_check <br> Busquedas de resultados</div>";
 
-      if(!$_POST)
-      {
-        header('Location: ../index.php');
-      }
+    echo "<br><div class='row'><a class='dropdown-button left white-text col s2' href='../index.php' ><i class='material-icons'>arrow_back</i> Regresar</a>";
+    echo"<a href='../logout.php' class='waves-effect blue-grey btn col s2 offset-s7'>Cerrar sesión</a></div>";
+    echo "<br><div class='row '>Bienvenido $user_check <br> Busquedas de resultados</div>";
 
-      else
-      {
-        if(isset($_POST['finicio']))
-        {
-          $finicio = $_POST['finicio'];
-          $ffinal = $_POST['ffinal'];
+    if(isset($_POST['finicio']))
+    {
+      $finicio = $_POST['finicio'];
+      $ffinal = $_POST['ffinal'];
+    }
+    else
+    {
+      $date1 = new DateTime("now");
+      $today = $date1->format('Y-m-d');
+      $finicio = $today;
+      $ffinal = $today;
+    }
 
-
-        }
-        else
-        {
-          $date1 = new DateTime("now");
-          $today = $date1->format('Y-m-d');
-          $finicio = $today;
-          $ffinal = $today;
-        }
-
-       echo "
+    echo "
+    <div class='row'>
+      <form method = 'post'>
         <div class='row'>
-         <form method = 'post'>
-            <div class='row'>
-            <div class='col s3 offset-s3'>
-              <div class='col s12 m12'>
-                <input type='date' name='finicio' id='finicio' value='$finicio' required>
-                <label for='finicio'>Fecha incial</label>
-              </div>
-            </div>
-            <div class='col s3'>
-              <div class='col s12 m12'>
-                <input type='date' name='ffinal' id='ffinal' value='$ffinal' required>
-                <label for='ffinal'>Fecha final</label>
-              </div>
-            </div>            <button class='waves-effect  btn  row col s4 offset-s4' type='submit' name='Submit'>Buscar</button>
-         </form>
+        <div class='col s3 offset-s3'>
+          <div class='col s12 m12'>
+            <input type='date' name='finicio' id='finicio' value='$finicio' required>
+            <label for='finicio'>Fecha incial</label>
+          </div>
         </div>
+        <div class='col s3'>
+          <div class='col s12 m12'>
+            <input type='date' name='ffinal' id='ffinal' value='$ffinal' required>
+            <label for='ffinal'>Fecha final</label>
+          </div>
+        </div>            
 
-        ";
+        <button class='waves-effect  btn  row col s4 offset-s4' type='submit' name='Submit'>Buscar</button>
+      </form>
+    </div>
+    ";
 
-        $sqlSobreResult = "SELECT distinct habitacion as hab, (SELECT COUNT(*) FROM incidentes WHERE habitacion = hab) as numero FROM incidentes WHERE date_1 BETWEEN '$finicio' AND '$ffinal' ORDER BY numero DESC LIMIT 10";
+    $ffinalMasUno = strtotime ( '+1 day' , strtotime ( $ffinal ) ) ;
+    $ffinalMasUno = date ( 'Y-m-j' , $ffinalMasUno );
+    $sqlSobreResult = "SELECT distinct habitacion as hab, (SELECT COUNT(*) FROM incidentes WHERE habitacion = hab) as numero FROM incidentes WHERE date_1 BETWEEN '$finicio' AND '$ffinalMasUno' ORDER BY numero DESC LIMIT 10";
 
-        $datos[0] = array('Cantidad','Servicios');
+    $datos[0] = array('Cantidad','Servicios');
 
-        //echo "<br> Segunda consulta: " . $sqlSobreResult;
-        if ($result = $mysqli->query($sqlSobreResult))
+    if ($result = $mysqli->query($sqlSobreResult))
+    {
+      if ($result->num_rows > 0)
+      {
+        $i = 1;
+        while ($row = $result->fetch_object())
         {
-          if ($result->num_rows > 0)
-          {
-            $i = 1;
-            while ($row = $result->fetch_object())
-            {
-              //echo $Horizontal . ": " . $row->horizontal;
-                    //echo " Cantidad: " . $rowCantidad->numero . "<br>";
-                    $datos[$i] = array( $row->hab , (int)$row->numero ); 
-                    $i = $i +1;
-
-            }
-          }
+          $datos[$i] = array( $row->hab , (int)$row->numero ); 
+          $i = $i +1;
         }
-        echo "<div class='row'>";
-
-        ?>
-
-
-              <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-              <script type="text/javascript">
-                google.charts.load('current', {'packages':['bar']});
-                google.charts.setOnLoadCallback(drawStuff);
-
-                var cargaDatos = <?php echo json_encode($datos); ?>;
-
-                function drawStuff() {
-                  var data = new google.visualization.arrayToDataTable(cargaDatos);
-
-                  var options = {
-                    width: 750,
-                    height: 400,
-                    legend: { position: 'none' },
-                    chart: {
-                      title: 'Grafica 10 mas frecuentes ',
-                      subtitle: 'Sistema de control a mantenimeinto chapas y cajas de seguridad' },
-                    axes: {
-                      x: {
-                        0: { side: 'top', label: <?php echo "'habitacion'"?>} // Top x-axis.
-                      }
-                    },
-                    bar: { groupWidth: "30%" }
-                  };
-
-                  var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-                  // Convert the Classic options to Material options.
-                  chart.draw(data, google.charts.Bar.convertOptions(options));
-                };
-              </script>
-              <div class="container"><div class="row"><div id="top_x_div" style="width: 750px; height: 500px;"></div></div></div>
-            </div>
-
-        <?php
-
-
       }
+    }
 
-      
     ?>
 
+    <div class="row">
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script type="text/javascript">
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawStuff);
+
+        var cargaDatos = <?php echo json_encode($datos); ?>;
+
+        function drawStuff() {
+          var data = new google.visualization.arrayToDataTable(cargaDatos);
+
+          var options = {
+            width: 600,
+            height: 400,
+            legend: { position: 'none' },
+            chart: {
+              title: 'Grafica 10 mas frecuentes ',
+              subtitle: 'Sistema de control a mantenimeinto chapas y cajas de seguridad' },
+            axes: {
+              x: {
+                0: { side: 'top', label: <?php echo "'habitacion'"?>} // Top x-axis.
+              }
+            },
+            bar: { groupWidth: "30%" }
+          };
+
+          var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+          // Convert the Classic options to Material options.
+          chart.draw(data, google.charts.Bar.convertOptions(options));
+        };
+      </script>
+      <div class="container"><div class="row"><div id="top_x_div" style="width: 750px; height: 500px;"></div></div></div>
+    </div>
+    
   </div>
      <!--Import jQuery before materialize.js-->
       <script type="text/javascript" src="../../js/jquery-3.2.1.min.js"></script>

@@ -36,21 +36,13 @@ include('../../check.php');
       else
       {
 
-
         $sql = $_POST['consulta'];
         $Horziontal = $_POST['ordenar'];
-
-        //$sql = addslashes($sql);
-        //
-        //SELECT distinct title from solvetic.solvetic_mysql;
-        //echo $sql;
-        //$Horziontal = "nombre";
 
         $sqlSobreResult = "SELECT distinct $Horziontal as horizontal FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario  ". $sql ." ";
 
         $datos[0] = array('Cantidad','Servicios');
 
-        //echo "<br> Segunda consulta: " . $sqlSobreResult;
         if ($result = $mysqli->query($sqlSobreResult))
         {
           if ($result->num_rows > 0)
@@ -58,7 +50,6 @@ include('../../check.php');
             $i = 1;
             while ($row = $result->fetch_object())
             {
-              //echo $Horziontal . ": " . $row->horizontal;
               $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario ". $sql ." AND $Horziontal = '$row->horizontal'";
               if ($resultCantidad = $mysqli->query($sqlSobreResultCantidad))
               {
@@ -66,7 +57,6 @@ include('../../check.php');
                 {
                   while ($rowCantidad = $resultCantidad->fetch_object())
                   {
-                    //echo " Cantidad: " . $rowCantidad->numero . "<br>";
                     $datos[$i] = array( $row->horizontal , (int)$rowCantidad->numero ); 
                     $i = $i +1;
                   }
@@ -78,43 +68,42 @@ include('../../check.php');
 
         ?>
 
-              <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-              <script type="text/javascript">
-                google.charts.load('current', {'packages':['bar']});
-                google.charts.setOnLoadCallback(drawStuff);
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          google.charts.load('current', {'packages':['bar']});
+          google.charts.setOnLoadCallback(drawStuff);
 
-                var cargaDatos = <?php echo json_encode($datos); ?>;
+          var cargaDatos = <?php echo json_encode($datos); ?>;
 
-                function drawStuff() {
-                  var data = new google.visualization.arrayToDataTable(cargaDatos);
+          function drawStuff() {
+            var data = new google.visualization.arrayToDataTable(cargaDatos);
 
-                  var options = {
-                    width: 750,
-                    height: 400,
-                    legend: { position: 'none' },
-                    chart: {
-                      title: 'Grafica opcional',
-                      subtitle: 'Sistema de control a mantenimeinto chapas y cajas de seguridad' },
-                    axes: {
-                      x: {
-                        0: { side: 'top', label: <?php echo "'". $Horziontal ."'"?>} // Top x-axis.
-                      }
-                    },
-                    bar: { groupWidth: "30%" }
-                  };
+            var options = {
+              width: 600,
+              height: 400,
+              legend: { position: 'none' },
+              chart: {
+                title: 'Grafica opcional',
+                subtitle: 'Sistema de control a mantenimeinto chapas y cajas de seguridad' },
+              axes: {
+                x: {
+                  0: { side: 'top', label: <?php echo "'". $Horziontal ."'"?>} // Top x-axis.
+                }
+              },
+              bar: { groupWidth: "30%" }
+            };
 
-                  var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-                  // Convert the Classic options to Material options.
-                  chart.draw(data, google.charts.Bar.convertOptions(options));
-                };
-              </script>
-              <div class="container"><div class="row"><div id="top_x_div" style="width: 750px; height: 500px;"></div></div></div>
+            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+            // Convert the Classic options to Material options.
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+          };
+        </script>
+        <div class="container"><div class="row"><div id="top_x_div" style="width: 750px; height: 500px;"></div></div></div>
 
         <?php
 
       }
-
-      
+ 
     ?>
 
   </div>

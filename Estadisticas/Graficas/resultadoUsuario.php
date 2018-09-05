@@ -28,13 +28,6 @@ include('../../check.php');
       echo"<a href='../logout.php' class='waves-effect blue-grey btn col s2 offset-s7'>Cerrar sesión</a></div>";
       echo "<br><div class='row '>Bienvenido $user_check <br> Busquedas de resultados</div>";
 
-      if(!$_POST)
-      {
-        header('Location: ../index.php');
-      }
-
-      else
-      {
         if(isset($_POST['finicio']))
         {
           $finicio = $_POST['finicio'];
@@ -71,11 +64,13 @@ include('../../check.php');
 
         ";
 
-        $sqlSobreResult = "SELECT DISTINCT usuarios.nombre as usuario FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario WHERE date_1 BETWEEN '$finicio' AND '$ffinal' ";
+        $ffinalMasUno = strtotime ( '+1 day' , strtotime ( $ffinal ) ) ;
+        $ffinalMasUno = date ( 'Y-m-j' , $ffinalMasUno );
+        $sqlSobreResult = "SELECT DISTINCT usuarios.nombre as usuario FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario WHERE date_1 BETWEEN '$finicio' AND '$ffinalMasUno' ";
 
         $datos[0] = array('Cantidad','Servicios');
 
-        //echo "<br> Segunda consulta: " . $sqlSobreResult;
+        //echo "<br> Consulta: " . $sqlSobreResult;
         if ($result = $mysqli->query($sqlSobreResult))
         {
           if ($result->num_rows > 0)
@@ -84,7 +79,7 @@ include('../../check.php');
             while ($row = $result->fetch_object())
             {
               //echo $Horizontal . ": " . $row->horizontal;
-              $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario WHERE nombre = '$row->usuario' AND date_1 BETWEEN '$finicio' AND '$ffinal'";
+              $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario WHERE nombre = '$row->usuario' AND date_1 BETWEEN '$finicio' AND '$ffinalMasUno'";
               if ($resultCantidad = $mysqli->query($sqlSobreResultCantidad))
               {
                 if ($resultCantidad->num_rows > 0)
@@ -116,7 +111,7 @@ include('../../check.php');
                   var data = new google.visualization.arrayToDataTable(cargaDatos);
 
                   var options = {
-                    width: 750,
+                    width: 600,
                     height: 400,
                     legend: { position: 'none' },
                     chart: {
@@ -139,10 +134,6 @@ include('../../check.php');
             </div>
 
         <?php
-
-
-      }
-
       
     ?>
 

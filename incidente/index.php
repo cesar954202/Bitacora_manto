@@ -58,7 +58,7 @@ include('../check.php');
 
           </div>
           <div class="input-field col s12 m12">
-            <textarea name="comentario" id="comentario" class="materialize-textarea" required></textarea>
+            <textarea name="comentario" id="comentario" class="materialize-textarea" data-length="50" required></textarea>
             <label for="comentario">Comentario</label>
           </div>
 
@@ -74,6 +74,7 @@ include('../check.php');
       <script type="text/javascript">
         $(document).ready(function() {
         $('select').material_select();
+        $('input#input_text, textarea#textarea1').characterCounter();
       });
 
         function valida(e){

@@ -33,32 +33,41 @@ include('../check.php');
               <br><div class='row '>Bienvenido $user_check 
               <br> Busquedas de resultados</div>";
 
+              /*Modal de Graficas predefinidas*/
+
     echo"<div class='modal blue-grey' id='graficos'>
           <div class='modal-content'>
               <h5 class='header'> Graficas </h5>
               <div class='row white-text blue-grey'>";
-                echo '<form action="Graficas/resultadoPisos.php" target="_blank" method="post">
-                        <input type="hidden" value="pisos" name="ordenar">
-                        <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por pisos</button>
-                      </form>';
-                echo '<form action="Graficas/resultadoUsuario.php" target="_blank" method="post">
-                        <input type="hidden" value="Nada" name="consulta">
-                        <input type="hidden" value="habitacion" name="ordenar">
-                        <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por operador</button>
-                      </form>';
-                echo '<form action="Graficas/resultadoTop.php" target="_blank" method="post">
-                        <input type="hidden" value="Nada" name="consulta">
-                        <input type="hidden" value="habitacion" name="ordenar">
-                        <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar mas frecuentes</button>
-                      </form>';
+
+                echo "<div class= 'row'>";
+                        ?>
+                        <a href="#" onclick="window.open('Graficas/resultadoPisos.php','popup','width=800,height=800');" class="waves-effect  btn  row col s4 offset-s4">Graficar por pisos</a>
+                        <?php
+                echo "</div>";
+
+                echo "<div class= 'row'>";
+                        ?>
+                        <a href="#" onclick="window.open('Graficas/resultadoUsuario.php','popup','width=800,height=800');" class="waves-effect  btn  row col s4 offset-s4">Graficar por usuario</a>
+                        <?php
+                echo "</div>";
+
+                echo "<div class= 'row'>";
+                        ?>
+                        <a href="#" onclick="window.open('Graficas/resultadoTop.php','popup','width=800,height=800');" class="waves-effect  btn  row col s4 offset-s4">Graficar mas frecuentes</a>
+                        <?php
+                echo "</div>";
 
             echo "</div>";
         echo"</div> ";
       echo"</div>";
 
+              /* FIN Modal de Graficas predefinidas*/
+
+
       if(!$_POST)
       {
-
+/////////Impresion de Opciones para busquedas
         echo"
       <form action='' method='post'>
         <div class='row'>
@@ -146,12 +155,6 @@ include('../check.php');
         ";
 
       }
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////Realizando Busquedas
       else
       {
@@ -309,7 +312,6 @@ include('../check.php');
       //Se construye la consulta 
       $sql2Parte = $sqlquery;
       $sqlquery = $sql1Parte . $sqlquery;
-      echo $sqlquery . "<br>";
 
 
         echo "<div class='row'>
@@ -345,23 +347,34 @@ include('../check.php');
 
                       <h5 class='header'> Graficar por: </h5>
                       <div class='row white-text blue-grey'>";
-                        echo '<form action="Graficas/index.php" target="_blank" method="post">
-                                <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
-                                <input type="hidden" value="habitacion" name="ordenar">
-                                <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por habitacion</button>
-                              </form>';
+                        echo "<div class= 'row'>";
+                                $sqlCodificado = base64_encode($sqlqueryEnvio);
+                                ?>
+                                <a href="#" onclick="window.open(
+                                'Graficas/grafica.php?consulta=<?php echo $sqlCodificado;?>&ordenar=habitacion','popup','width=800,height=800');" class="waves-effect  btn  row col s4 offset-s4">Grafico por habitacion</a>
 
-                        echo '<form action="Graficas/index.php" target="_blank" method="post">
-                                <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
-                                <input type="hidden" value="nombre" name="ordenar">
-                                <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por usuario</button>
-                              </form>';
+                                <?php
+                        echo "</div>";
 
-                        echo '<form action="Graficas/index.php" target="_blank" method="post">
-                                <input type="hidden" value="'. $sqlqueryEnvio .'" name="consulta">
-                                <input type="hidden" value="servicio" name="ordenar">
-                                <button class="waves-effect  btn  row col s4 offset-s4" type="submit" name="Submit">Graficar por servicio</button>
-                              </form>';
+                        echo "<div class= 'row'>";
+                                $sqlCodificado = base64_encode($sqlqueryEnvio);
+                                ?>
+                                <a href="#" onclick="window.open(
+                                'Graficas/grafica.php?consulta=<?php echo $sqlCodificado;?>&ordenar=nombre','popup','width=800,height=800');" class="waves-effect  btn  row col s4 offset-s4">Grafico por Usuario</a>
+
+                                <?php
+                        echo "</div>";
+
+                        echo "<div class= 'row'>";
+                                $sqlCodificado = base64_encode($sqlqueryEnvio);
+                                ?>
+                                <a href="#" onclick="window.open(
+                                'Graficas/grafica.php?consulta=<?php echo $sqlCodificado;?>&ordenar=servicio','popup','width=800,height=800');" class="waves-effect  btn  row col s4 offset-s4">Grafico por Servicio</a>
+
+                                <?php
+                        echo "</div>";
+
+
 
                     echo "</div>";
                 echo"</div> ";
