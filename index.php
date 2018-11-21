@@ -5,7 +5,7 @@
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // Usamos el nombre de usuario enviado de nuestro formulario
 
-      $myusername = mysqli_real_escape_string($mysqli,strtoupper($_POST['usuario_l'])); // Nombre del usuario
+      $myusername = mysqli_real_escape_string($mysqli,strtoupper($_POST['usuario_l'])); // Nombre del usuario convertido a Mayusculas
       $mypassword = mysqli_real_escape_string($mysqli,$_POST['contrasena_l']); // Pdw del usuario 
 
 
@@ -99,8 +99,19 @@
     </div>
   <!--fin contenedor de login-->
   </div>
+
+
      <!--Import jQuery before materialize.js-->
       <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
       <script type="text/javascript" src="js/materialize.min.js"></script>
 </body>
+
+
+
+<div class="footer-copyright">
+  <div class="container">
+    <div align="right">by Cesar Sanchez</div>
+  </div>
+</div>
+
 </html>

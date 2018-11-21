@@ -28,49 +28,23 @@ include('../../check.php');
       echo"<a onclick='window.close();' class='waves-effect blue-grey btn col s2 offset-s7'>Cerrar</a></div>";
       echo "<br><div class='row '>Bienvenido $user_check <br> Busquedas de resultados</div>";
 
-        if(isset($_POST['finicio']))
-        {
-          $finicio = $_POST['finicio'];
-          $ffinal = $_POST['ffinal'];
-        }
-        else
-        {
-          $date1 = new DateTime("now");
-          $today = $date1->format('Y-m-d');
-          $finicio = $today;
-          $ffinal = $today;
-        }
+      if(!$_GET)
+      {
+        header('Location: ../index.php');
+      }
 
-       echo "
-        <div class='row'>
-          <form method = 'post'>
-            <div class='row'>
-            <div class='col s3 offset-s3'>
-              <div class='col s12 m12'>
-                <input type='date' name='finicio' id='finicio' value='$finicio' required>
-                <label for='finicio'>Fecha incial</label>
-              </div>
-            </div>
-            <div class='col s3'>
-              <div class='col s12 m12'>
-                <input type='date' name='ffinal' id='ffinal' value='$ffinal' required>
-                <label for='ffinal'>Fecha final</label>
-              </div>
-            </div>            
+      else
+      {
+        $sqlencode = $_GET['consulta'];
+        $sql = base64_decode($sqlencode);
 
-            <button class='waves-effect  btn  row col s4 offset-s4' type='submit' name='Submit'>Buscar</button>
-          </form>
-        </div>
-        ";
+        $Horziontal = $_GET['ordenar'];
+        ///consulta de objetos diferentes integrado a los parametros de la otra busqueda                                               integracion de parametros
 
-        $ffinalMasUno = strtotime ( '+1 day' , strtotime ( $ffinal ) ) ;
-        $ffinalMasUno = date ( 'Y-m-j' , $ffinalMasUno );
-
-        $sqlSobreResult = "SELECT DISTINCT substring( habitacion ,1,2) as horizontal FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario WHERE date_1 BETWEEN '$finicio' AND '$ffinalMasUno' ";
+        $sqlSobreResult = "SELECT distinct $Horziontal as horizontal FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario  ". $sql ." ";
 
         $datos[0] = array('Cantidad','Servicios');
 
-        //echo "<br> Segunda consulta: " . $sqlSobreResult;
         if ($result = $mysqli->query($sqlSobreResult))
         {
           if ($result->num_rows > 0)
@@ -78,28 +52,30 @@ include('../../check.php');
             $i = 1;
             while ($row = $result->fetch_object())
             {
-              //echo $Horizontal . ": " . $row->horizontal;
-              $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario WHERE habitacion LIKE '$row->horizontal%' AND date_1 BETWEEN '$finicio' AND '$ffinalMasUno'";
+
+              //consulta de cantidad de objetos buscados
+              $sqlSobreResultCantidad = "SELECT COUNT(*) as numero FROM incidentes INNER JOIN usuarios ON incidentes.id_usuario = usuarios.id_usuario ". $sql ." AND $Horziontal = '$row->horizontal'";
               if ($resultCantidad = $mysqli->query($sqlSobreResultCantidad))
               {
                 if ($resultCantidad->num_rows > 0)
                 {
                   while ($rowCantidad = $resultCantidad->fetch_object())
                   {
-                    //echo " Cantidad: " . $rowCantidad->numero . "<br>";
+                    /////Insersion en arreglo para impresion en graficas
                     $datos[$i] = array( $row->horizontal , (int)$rowCantidad->numero ); 
                     $i = $i +1;
                   }
                 }
               }
+              ///Se acaba consulta de cantidad de objetos
             }
           }
         }
-        echo "";
+
         ?>
-        <div class="row">
-          <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-          <script type="text/javascript">
+        <!--Script Grafica impresion -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
           google.charts.load('current', {'packages':['bar']});
           google.charts.setOnLoadCallback(drawStuff);
 
@@ -113,11 +89,11 @@ include('../../check.php');
               height: 400,
               legend: { position: 'none' },
               chart: {
-                title: 'Grafica pisos ',
+                title: 'Grafica opcional',
                 subtitle: 'Sistema de control a mantenimeinto chapas y cajas de seguridad' },
               axes: {
                 x: {
-                  0: { side: 'top', label: <?php echo "'Pisos'"?>} // Top x-axis.
+                  0: { side: 'top', label: <?php echo "'". $Horziontal ."'"?>} // Top x-axis.
                 }
               },
               bar: { groupWidth: "30%" }
@@ -126,19 +102,25 @@ include('../../check.php');
             var chart = new google.charts.Bar(document.getElementById('top_x_div'));
             // Convert the Classic options to Material options.
             chart.draw(data, google.charts.Bar.convertOptions(options));
-            };
-          </script>
-          <div class="container"><div class="row"><div id="top_x_div" style="width: 750px; height: 500px;"></div></div></div>
-        </div>
+          };
+        </script>
+        <!--FIN Grafica impresion -->
+        <div class="container"><div class="row"><div id="top_x_div" style="width: 750px; height: 500px;"></div></div></div><!-- Grafica impresion -->
+        <?php
+
+      }
+      
+    ?>
+
   </div>
      <!--Import jQuery before materialize.js-->
-  <script type="text/javascript" src="../../js/jquery-3.2.1.min.js"></script>
-  <script type="text/javascript" src="../../js/materialize.min.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $('select').material_select();
-    });
-  </script>
+      <script type="text/javascript" src="../../js/jquery-3.2.1.min.js"></script>
+      <script type="text/javascript" src="../../js/materialize.min.js"></script>
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $('select').material_select();
+        });
+      </script>
 </body>
 </html>
 

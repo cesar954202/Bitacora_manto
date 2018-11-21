@@ -29,7 +29,7 @@ include('../check.php');
         <form class="row grey darken-4 white-text z-depth-5" action="editando_usuario.php" method="post" enctype="multipart/form-data" >
           <?php
 
-          $id_usuario = $_POST['id_usuario'];
+          $id_usuario = $id_usuario;
           echo "ID :" . $id_usuario;
 
           $sql= "SELECT * FROM usuarios WHERE id_usuario = '$id_usuario'";
@@ -43,25 +43,13 @@ include('../check.php');
                 echo "<br><div class='row '>Bienvenido $user_check</div>";
                 echo "<input type='hidden' value='$row->id_usuario' name='id_usuario'>";
                 echo" <div class='input-field col s12 m12'>
-                        <input value ='$row->nombre' type='text' name='nombre' id='nombre' class='validate' required>
+                        <input value ='$row->nombre' type='text' name='nombre' id='nombre' class='validate' required readonly>
                         <label for='nombre'>Nombre de usuario</label>
                       </div>";
-                      $Administrador = "";
-                      $Estandar = "";
-                      $Deshabilitado = "";
-                      if ($row->tipo == -1) {$Deshabilitado = "selected";}
-                      if ($row->tipo == 1) {$Estandar = "selected";}
-                      if ($row->tipo == 0) {$Administrador = "selected";}
+
+                echo "<input type='hidden' value='$row->tipo' name='tipo'>";
 
                 echo"<div class='col s12 m12'>
-                        <div class='input-field white-text'>
-                          <select name='tipo' required>
-                          <option value= '-1' $Deshabilitado> Deshabilitar </option >
-                            <option value= '1' $Estandar> Estandar </option >
-                            <option value= '0' $Administrador> Administrador </option>
-                          </select>
-                        <label>Permiso:</label>
-                        </div>
                         
                       </div>
                       <div class='input-field col s12'>

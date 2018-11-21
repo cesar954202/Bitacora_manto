@@ -425,11 +425,5 @@ include('../check.php');
           $(".modal").modal();
         });
       </script>
-
-      <div class="footer-copyright">
-  <div class="container">
-    <div align="right">by Cesar Sanchez</div>
-  </div>
-</div>
 </body>
 </html>

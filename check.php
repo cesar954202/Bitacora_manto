@@ -4,7 +4,7 @@
    $user_check = $_SESSION['login_user'];
    $tipo_user = $_SESSION['username'];
 
-   $sqlqueryV = "SELECT *  FROM usuarios WHERE nombre = '$user_check' ";
+   $sqlqueryV = "SELECT * FROM usuarios WHERE nombre = '$user_check' ";
 
           if ($resultV = $mysqli->query($sqlqueryV))
           {
